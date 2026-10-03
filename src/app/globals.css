@@ -2,35 +2,24 @@
 
 @theme {
   --color-premium-bg: #fdfaf6;
+  --color-premium-surface: #f7f3ec;
+  --color-premium-border: #e6dfd3;
   --color-premium-text: #1c1917;
-  --color-premium-orange: #ea580c;
-  --color-premium-orange-light: #ffedd5;
-  --color-premium-border: #e7e5e4;
-  --color-premium-surface: #ffffff;
+  --color-premium-orange: #c5a059;
+  --color-premium-orange-light: #eaddc3;
+  
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
 }
 
 @layer base {
-  :root {
-    --background: var(--color-premium-bg);
-    --foreground: var(--color-premium-text);
-  }
-
   body {
-    background-color: var(--background);
-    color: var(--foreground);
-    @apply antialiased transition-colors duration-300;
+    background-color: var(--color-premium-bg);
+    color: var(--color-premium-text);
   }
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Hide scrollbar for clean aesthetic but allow scrolling */
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }

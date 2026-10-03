@@ -27,28 +27,24 @@ export default function AdminUpload() {
       const fileName = Math.random().toString() + '.' + fileExt;
       const filePath = 'uploads/' + fileName;
 
-      // 1. Upload to public-watermarked (Simulating watermarking for now)
       const { error: publicError } = await supabase.storage
         .from('public-watermarked')
         .upload(filePath, file);
         
       if (publicError) throw publicError;
 
-      // 2. Upload to secure-highres
       const { error: secureError } = await supabase.storage
         .from('secure-highres')
         .upload(filePath, file);
 
       if (secureError) throw secureError;
 
-      // 3. Get the public URL
       const { data: { publicUrl } } = supabase.storage
         .from('public-watermarked')
         .getPublicUrl(filePath);
 
       setMessage("Saving metadata...");
 
-      // 4. Insert into Database
       const tagArray = tags.split(',').map(tag => tag.trim()).filter(t => t !== '');
       
       const { error: dbError } = await supabase
@@ -60,7 +56,7 @@ export default function AdminUpload() {
           tags: tagArray,
           watermarked_url: publicUrl,
           highres_path: filePath,
-          width: 1920, // Ideally, we'd extract actual dimensions before upload
+          width: 1920,
           height: 1080
         });
 
@@ -81,13 +77,13 @@ export default function AdminUpload() {
   };
 
   return (
-    <div className="min-h-screen bg-premium-bg py-32 px-6">
-      <div className="max-w-3xl mx-auto bg-premium-surface p-10 rounded-xl shadow-lg border border-premium-border/60">
-        <h1 className="font-serif text-4xl text-premium-text mb-2">Admin Dashboard</h1>
-        <p className="text-premium-text/60 mb-10">Upload new high-resolution exclusive imagery.</p>
+    <div className="max-w-4xl">
+      <div className="bg-premium-surface p-10 rounded-xl shadow-sm border border-premium-border/60">
+        <h1 className="font-serif text-4xl text-premium-text mb-2">Upload Masterpiece</h1>
+        <p className="text-premium-text/60 mb-10">Upload new high-resolution exclusive imagery to the studio.</p>
         
         {message && (
-          <div className="mb-6 p-4 rounded bg-premium-orange/10 text-premium-orange border border-premium-orange/30">
+          <div className="mb-6 p-4 rounded bg-green-500/10 text-green-600 border border-green-500/30">
             {message}
           </div>
         )}
