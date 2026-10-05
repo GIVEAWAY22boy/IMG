@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 export default function MainLayout({
   children,
@@ -7,16 +8,7 @@ export default function MainLayout({
 }>) {
   return (
     <>
-      <nav className="w-full py-8 px-10 flex justify-between items-center absolute top-0 z-50">
-        <Link href="/" className="font-serif text-3xl tracking-widest font-medium text-premium-text">
-          MvjHub.
-        </Link>
-        <div className="flex gap-8 text-sm uppercase tracking-[0.2em] text-premium-text font-medium">
-          <Link href="/collection" className="hover:text-premium-orange transition-colors duration-300">Collection</Link>
-          <Link href="/about" className="hover:text-premium-orange transition-colors duration-300">About</Link>
-          <Link href="/cart" className="hover:text-premium-orange transition-colors duration-300">Cart (0)</Link>
-        </div>
-      </nav>
+      <Navbar />
       
       <main className="flex-grow">{children}</main>
 

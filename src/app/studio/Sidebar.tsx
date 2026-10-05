@@ -10,8 +10,7 @@ export default function Sidebar() {
   const links = [
     { href: "/studio", label: "Overview" },
     { href: "/studio/upload", label: "Upload Image" },
-    { href: "/studio/categories", label: "Categories" },
-    { href: "/studio/pricing", label: "Global Pricing" },
+    { href: "/studio/inventory", label: "Inventory" },
   ];
 
   return (
