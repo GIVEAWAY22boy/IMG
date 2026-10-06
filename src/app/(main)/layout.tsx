@@ -40,10 +40,12 @@ export default function MainLayout({
         
         <div className="max-w-[1600px] mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center border-t border-white/10 pt-8 text-sm font-light text-white/40">
           <p>&copy; 2026 MvjHub. All rights reserved.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
+          <div className="flex flex-wrap justify-center gap-6 mt-4 md:mt-0">
+            <Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="/refund" className="hover:text-white transition-colors">Refund Policy</Link>
+            <Link href="/refund" className="hover:text-white transition-colors">Refunds & Cancellations</Link>
+            <Link href="/shipping" className="hover:text-white transition-colors">Shipping & Delivery</Link>
           </div>
         </div>
       </footer>
