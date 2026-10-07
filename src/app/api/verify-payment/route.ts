@@ -24,12 +24,16 @@ export async function GET(req: Request) {
 
     // 1. Verify the payment status with Cashfree
     const response = await cashfree.PGOrderFetchPayments(order_id as string);
-    const isPaid = response.data?.some(
-      (payment: any) => payment.payment_status === "SUCCESS"
-    );
+    const payments = response.data || [];
+    
+    const isPaid = payments.some((payment: any) => payment.payment_status === "SUCCESS");
+    const isPending = !isPaid && payments.some((payment: any) => payment.payment_status === "PENDING");
 
     if (!isPaid) {
-      return NextResponse.json({ success: false, message: "Payment not successful" });
+      if (isPending) {
+        return NextResponse.json({ success: false, status: "PENDING", message: "Payment is still processing." });
+      }
+      return NextResponse.json({ success: false, status: "FAILED", message: "Payment not successful" });
     }
 
     // 2. Lookup the order in Supabase

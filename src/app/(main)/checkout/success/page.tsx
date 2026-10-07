@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 
 export default function CheckoutSuccess({ searchParams }: { searchParams: Promise<{ order_id?: string }> }) {
-  const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
+  const [status, setStatus] = useState<"loading" | "success" | "pending" | "failed">("loading");
   const [downloads, setDownloads] = useState<{title: string, url: string}[]>([]);
   const clearCart = useCartStore((state) => state.clearCart);
   
@@ -28,6 +28,8 @@ export default function CheckoutSuccess({ searchParams }: { searchParams: Promis
           setStatus("success");
           setDownloads(data.downloads || []);
           clearCart();
+        } else if (data.status === "PENDING") {
+          setStatus("pending");
         } else {
           setStatus("failed");
         }
@@ -44,6 +46,30 @@ export default function CheckoutSuccess({ searchParams }: { searchParams: Promis
       <div className="min-h-screen bg-premium-bg flex flex-col items-center justify-center gap-6">
         <div className="loader scale-150"></div>
         <p className="font-serif text-premium-text text-2xl animate-pulse mt-8">Verifying Payment & Generating Secure Links...</p>
+      </div>
+    );
+  }
+
+  if (status === "pending") {
+    return (
+      <div className="min-h-screen bg-premium-bg flex flex-col items-center justify-center px-6">
+        <div className="w-24 h-24 rounded-full border-2 border-yellow-500 text-yellow-500 flex items-center justify-center mb-8 shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <h1 className="font-serif text-5xl text-premium-text mb-4 text-center">Payment Processing</h1>
+        <p className="text-premium-text/70 mb-2 max-w-md text-center">Your order <span className="font-mono text-premium-text font-bold">{orderId}</span> is currently pending with the bank.</p>
+        
+        <div className="bg-yellow-500/10 border border-yellow-500/30 p-6 rounded-md mb-10 max-w-lg mt-6">
+          <p className="text-premium-text/90 text-sm text-center font-bold mb-2">🚨 IMPORTANT: Save this Order ID!</p>
+          <p className="text-premium-text/70 text-xs text-center leading-relaxed">
+            Because you checked out anonymously, this Order ID is your ONLY receipt. 
+            Please refresh this page in a few minutes, or save the URL to check back later once your bank confirms the transaction.
+          </p>
+        </div>
+
+        <button onClick={() => window.location.reload()} className="px-8 py-4 bg-premium-orange text-white rounded-full uppercase tracking-widest text-sm font-bold shadow-lg hover:bg-premium-text transition-colors">
+          Refresh Status
+        </button>
       </div>
     );
   }
