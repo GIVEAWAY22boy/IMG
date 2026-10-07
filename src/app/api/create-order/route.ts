@@ -12,6 +12,7 @@ const cashfree = new Cashfree(
 
 export async function POST(req: Request) {
   try {
+    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     const { items, total_usd } = await req.json();
 
     const order_id = "MVJ_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
         customer_name: "MvjHub Guest"
       },
       order_meta: {
-        return_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/checkout/success?order_id=${order_id}`
+        return_url: `${origin}/checkout/success?order_id=${order_id}`
       },
       order_note: "MvjHub Premium Stock Purchase"
     };

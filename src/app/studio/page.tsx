@@ -35,8 +35,8 @@ export default async function AdminDashboard() {
       </div>
 
       <h3 className="font-serif text-2xl text-premium-text mb-6">Recent Transactions</h3>
-      <div className="bg-premium-surface border border-premium-border/60 rounded-xl overflow-hidden shadow-sm">
-        <table className="w-full text-left text-sm text-premium-text/70">
+      <div className="bg-premium-surface border border-premium-border/60 rounded-xl overflow-x-auto shadow-sm">
+        <table className="w-full text-left text-sm text-premium-text/70 min-w-[500px]">
           <thead className="bg-premium-bg border-b border-premium-border/60 text-xs uppercase tracking-widest text-premium-text/40">
             <tr>
               <th className="p-6 font-normal">Order ID</th>

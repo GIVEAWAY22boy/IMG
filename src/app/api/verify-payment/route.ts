@@ -29,13 +29,6 @@ export async function GET(req: Request) {
     const isPaid = payments.some((payment: any) => payment.payment_status === "SUCCESS");
     const isPending = !isPaid && payments.some((payment: any) => payment.payment_status === "PENDING");
 
-    if (!isPaid) {
-      if (isPending) {
-        return NextResponse.json({ success: false, status: "PENDING", message: "Payment is still processing." });
-      }
-      return NextResponse.json({ success: false, status: "FAILED", message: "Payment not successful" });
-    }
-
     // 2. Lookup the order in Supabase
     const { data: orderData, error: orderError } = await supabaseAdmin
       .from('orders')
@@ -45,6 +38,22 @@ export async function GET(req: Request) {
 
     if (orderError || !orderData) {
       throw new Error("Order not found in database");
+    }
+
+    if (!isPaid) {
+      if (isPending) {
+        return NextResponse.json({ success: false, status: "PENDING", message: "Payment is still processing." });
+      }
+      
+      // If it's explicitly failed or cancelled, update the DB so the dashboard shows "failed" instead of forever "pending"
+      if (orderData.status === 'pending') {
+        await supabaseAdmin
+          .from('orders')
+          .update({ status: 'failed' })
+          .eq('id', orderData.id);
+      }
+      
+      return NextResponse.json({ success: false, status: "FAILED", message: "Payment not successful" });
     }
 
     // 3. Fetch purchased items and their high-res paths

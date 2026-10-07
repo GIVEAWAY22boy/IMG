@@ -75,7 +75,7 @@ export default function InventoryPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-premium-border/40 overflow-hidden min-h-[400px]">
+      <div className="bg-white rounded-xl shadow-sm border border-premium-border/40 overflow-x-auto min-h-[400px]">
         {loading ? (
           <div className="w-full h-[400px] flex items-center justify-center">
             <div className="loader scale-150"></div>
