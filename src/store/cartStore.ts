@@ -14,6 +14,7 @@ type CartState = {
   initCurrency: () => void;
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
+  clearCart: () => void;
 };
 
 // Fixed conversion rate for regional pricing (1 USD = 96.26 INR)
@@ -54,6 +55,9 @@ export const useCartStore = create<CartState>()(
       },
       removeFromCart: (id) => {
         set({ cart: get().cart.filter(i => i.id !== id) });
+      },
+      clearCart: () => {
+        set({ cart: [] });
       }
     }),
     {
