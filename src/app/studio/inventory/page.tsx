@@ -26,11 +26,12 @@ export default function InventoryPage() {
   const handleDelete = async (id: string, highresPath: string) => {
     if (!confirm("Are you sure you want to permanently delete this asset?")) return;
     
-    // 1. Delete from DB
-    await supabase.from("images").delete().eq("id", id);
-    
-    // 2. Delete from storage (mocking single bucket for now)
-    await supabase.storage.from("public-watermarked").remove([highresPath]);
+    const { deleteAsset } = await import("../actions");
+    const res = await deleteAsset(id, highresPath);
+    if (res?.error) {
+      alert("Failed to delete: " + res.error);
+      return;
+    }
     
     fetchImages();
   };
@@ -56,12 +57,19 @@ export default function InventoryPage() {
       return;
     }
     
-    await supabase.from("images").update({ 
-      title: editTitle, 
+    const { updateAsset } = await import("../actions");
+    const res = await updateAsset(editingImg.id, {
+      title: editTitle,
       price_usd: priceNum,
       description: editDescription,
       tags: editTags.split(',').map(t => t.trim()).filter(Boolean)
-    }).eq("id", editingImg.id);
+    });
+    
+    if (res?.error) {
+      alert("Failed to update: " + res.error);
+      return;
+    }
+
     setEditingImg(null);
     fetchImages();
   };

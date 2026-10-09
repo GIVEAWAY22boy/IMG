@@ -17,12 +17,12 @@ export default function AdminLogin() {
     const formData = new FormData(e.currentTarget);
     const result = await loginAdmin(formData);
     
-    if (result.error) {
+    if (result?.error) {
       setError(result.error);
       setIsLoading(false);
-    } else {
-      router.push("/studio");
     }
+    // Note: If login succeeds, loginAdmin() will call redirect() which throws an error
+    // handled internally by Next.js, so code below here won't execute on success.
   };
 
   return (
