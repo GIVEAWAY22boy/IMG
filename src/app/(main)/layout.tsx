@@ -31,21 +31,28 @@ export default function MainLayout({
             <Link href="/cart" className="hover:text-[#c5a059] transition-colors">Cart</Link>
           </div>
           <div className="flex flex-col gap-4">
-            <h3 className="uppercase tracking-[0.2em] text-xs font-bold text-white/40 mb-2">Connect</h3>
-            <a href="#" className="hover:text-[#c5a059] transition-colors">Instagram</a>
-            <a href="#" className="hover:text-[#c5a059] transition-colors">Twitter</a>
-            <a href="#" className="hover:text-[#c5a059] transition-colors">Pinterest</a>
+            <h3 className="uppercase tracking-[0.2em] text-xs font-bold text-white/40 mb-2">Connect & Support</h3>
+            <p className="text-sm text-white/70">
+              Inquiries: <a href="mailto:support@mvjhub.in" className="text-[#c5a059] hover:underline">support@mvjhub.in</a>
+            </p>
+            <p className="text-xs text-white/40">
+              HQ: Connaught Place, New Delhi, India
+            </p>
+            <div className="pt-2 flex items-center gap-2 text-xs text-white/50">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              PCI-DSS & RBI Compliant Processing
+            </div>
           </div>
         </div>
         
         <div className="max-w-[1600px] mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center border-t border-white/10 pt-8 text-sm font-light text-white/40">
-          <p>&copy; 2026 MvjHub. All rights reserved.</p>
+          <p>&copy; 2026 MvjHub Visual Media. All rights reserved.</p>
           <div className="flex flex-wrap justify-center gap-6 mt-4 md:mt-0">
-            <Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link>
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="/refund" className="hover:text-white transition-colors">Refunds & Cancellations</Link>
-            <Link href="/shipping" className="hover:text-white transition-colors">Shipping & Delivery</Link>
+            <Link href="/contact" className="hover:text-[#c5a059] transition-colors">Contact Us</Link>
+            <Link href="/privacy" className="hover:text-[#c5a059] transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-[#c5a059] transition-colors">Terms of Service</Link>
+            <Link href="/refund" className="hover:text-[#c5a059] transition-colors">Refund & Cancellation</Link>
+            <Link href="/shipping" className="hover:text-[#c5a059] transition-colors">Shipping & Delivery</Link>
           </div>
         </div>
       </footer>

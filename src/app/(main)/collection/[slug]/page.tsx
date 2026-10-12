@@ -173,9 +173,29 @@ export default function ImageSlugPage({ params }: { params: Promise<{ slug: stri
               </button>
             </div>
 
-            <p className="text-xs text-premium-text/40 mt-8 text-center flex items-center justify-center gap-2">
+            {/* Commercial Deliverables Breakdown */}
+            <div className="mt-8 bg-premium-surface border border-premium-border/60 rounded-xl p-5 space-y-3 text-xs text-premium-text/80">
+              <div className="flex justify-between items-center border-b border-premium-border/30 pb-2">
+                <span className="text-premium-text/50 uppercase tracking-widest font-semibold">License Type</span>
+                <span className="font-medium text-premium-text">Commercial & Editorial Rights</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-premium-border/30 pb-2">
+                <span className="text-premium-text/50 uppercase tracking-widest font-semibold">Deliverable</span>
+                <span className="font-medium text-premium-text">Master Clean File (No Watermark)</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-premium-border/30 pb-2">
+                <span className="text-premium-text/50 uppercase tracking-widest font-semibold">Format & Quality</span>
+                <span className="font-medium text-premium-text">Ultra-HD RAW / 300 DPI</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-premium-text/50 uppercase tracking-widest font-semibold">Fulfillment</span>
+                <span className="font-medium text-green-500 font-semibold">⚡ Instant Digital Download</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-premium-text/40 mt-6 text-center flex items-center justify-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              Secure One-Time Licensing
+              Verified Commercial Licensing • Lifetime Perpetual Grant
             </p>
           </div>
         </div>
