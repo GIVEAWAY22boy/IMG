@@ -89,7 +89,7 @@ export default function TermsPage() {
           <section>
             <h2 className="font-serif text-2xl text-premium-text mb-4 font-normal">8. Governing Law & Jurisdiction</h2>
             <p>
-              These Terms and any dispute or claim arising out of or in connection with them shall be governed by and construed in accordance with the laws of the Republic of India. The competent courts situated in <strong>New Delhi, India</strong> shall have exclusive jurisdiction over any legal dispute arising hereunder.
+              These Terms and any dispute or claim arising out of or in connection with them shall be governed by and construed in accordance with the laws of the Republic of India. The competent courts situated in <strong>Lalitpur, Uttar Pradesh, India</strong> shall have exclusive jurisdiction over any legal dispute arising hereunder.
             </p>
           </section>
 
@@ -101,7 +101,7 @@ export default function TermsPage() {
             <div className="bg-premium-surface border border-premium-border/40 p-6 rounded-xl mt-4 font-mono text-sm space-y-1">
               <p>Legal & Compliance Desk, MvjHub</p>
               <p>Email: legal@mvjhub.in / support@mvjhub.in</p>
-              <p>Address: Connaught Place, New Delhi, 110001, India</p>
+              <p>Address: 22, Kashiram Avas Colony, Near ITI, Lalitpur, Uttar Pradesh - 284403, India</p>
             </div>
           </section>
         </div>

@@ -97,7 +97,7 @@ export default function PrivacyPage() {
               <p>Designation: Grievance & Data Protection Officer</p>
               <p>Entity: MvjHub Visual Media</p>
               <p>Email: privacy@mvjhub.in / support@mvjhub.in</p>
-              <p>Location: Connaught Place, New Delhi, 110001, India</p>
+              <p>Location: 22, Kashiram Avas Colony, Near ITI, Lalitpur, Uttar Pradesh - 284403, India</p>
             </div>
           </section>
         </div>

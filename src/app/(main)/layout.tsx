@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 
 export default function MainLayout({
@@ -17,8 +18,15 @@ export default function MainLayout({
         
         <div className="max-w-[1600px] mx-auto relative z-10 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
           <div>
-            <Link href="/">
-              <h2 className="font-serif text-4xl text-[#c5a059] mb-4">MvjHub.</h2>
+            <Link href="/" className="inline-flex items-center gap-3 mb-4 group">
+              <Image
+                src="/logo_mvj.png"
+                alt="MvjHub Logo"
+                width={44}
+                height={44}
+                className="w-10 h-10 object-contain rounded-full shadow-md group-hover:scale-105 transition-transform"
+              />
+              <h2 className="font-serif text-3xl md:text-4xl text-[#c5a059] group-hover:text-white transition-colors">MvjHub.</h2>
             </Link>
             <p className="font-light text-white/60 max-w-sm">
               Curating the world's most exclusive, handmade, and breathtaking visual assets for creators who demand perfection.
@@ -35,8 +43,8 @@ export default function MainLayout({
             <p className="text-sm text-white/70">
               Inquiries: <a href="mailto:support@mvjhub.in" className="text-[#c5a059] hover:underline">support@mvjhub.in</a>
             </p>
-            <p className="text-xs text-white/40">
-              HQ: Connaught Place, New Delhi, India
+            <p className="text-xs text-white/40 leading-relaxed">
+              HQ: 22, Kashiram Avas Colony, Near ITI, Lalitpur, Uttar Pradesh - 284403, India
             </p>
             <div className="pt-2 flex items-center gap-2 text-xs text-white/50">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>

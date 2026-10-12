@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { logoutAdmin } from "./actions";
 
@@ -50,7 +51,14 @@ export default function Sidebar() {
     <>
       {/* Mobile Top Header */}
       <div className="md:hidden sticky top-0 z-40 bg-premium-surface border-b border-premium-border/60 p-5 flex justify-between items-center shadow-sm">
-        <Link href="/studio">
+        <Link href="/studio" className="flex items-center gap-2.5">
+          <Image
+            src="/logo_mvj.png"
+            alt="MvjHub Logo"
+            width={28}
+            height={28}
+            className="w-7 h-7 object-contain rounded-full"
+          />
           <h1 className="font-serif text-2xl text-premium-orange tracking-widest">MvjHub.</h1>
         </Link>
         <form action={logoutAdmin}>
@@ -65,10 +73,17 @@ export default function Sidebar() {
         
         {/* Desktop Only Logo */}
         <div className="hidden md:block p-8 border-b border-premium-border/60">
-          <Link href="/studio">
+          <Link href="/studio" className="flex items-center gap-3 group">
+            <Image
+              src="/logo_mvj.png"
+              alt="MvjHub Logo"
+              width={36}
+              height={36}
+              className="w-9 h-9 object-contain rounded-full group-hover:scale-105 transition-transform"
+            />
             <h1 className="font-serif text-3xl text-premium-orange tracking-widest hover:opacity-80 transition-opacity">MvjHub.</h1>
           </Link>
-          <p className="text-premium-text/40 uppercase tracking-[0.2em] text-[10px] font-bold mt-1">Studio Dashboard</p>
+          <p className="text-premium-text/40 uppercase tracking-[0.2em] text-[10px] font-bold mt-2">Studio Dashboard</p>
         </div>
         
         {/* Navigation Links */}

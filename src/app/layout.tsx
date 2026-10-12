@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "MvjHub",
     images: [
       {
-        url: "https://mvjhub.com/premium_1.jpg",
+        url: "https://mvjhub.com/logo_mvj.png",
         width: 1200,
         height: 630,
         alt: "MvjHub Exclusive Stock",
@@ -37,7 +37,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "MvjHub | Exclusive Stock Photography",
     description: "A premium, curated collection of handmade and exclusive stock imagery.",
-    images: ["https://mvjhub.com/premium_1.jpg"],
+    images: ["https://mvjhub.com/logo_mvj.png"],
+  },
+  icons: {
+    icon: "/logo_mvj.png",
+    shortcut: "/logo_mvj.png",
+    apple: "/logo_mvj.png",
   },
 };
 

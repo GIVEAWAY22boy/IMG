@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { loginAdmin } from "../actions";
 import { useRouter } from "next/navigation";
 
@@ -28,8 +29,16 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen bg-premium-bg flex items-center justify-center p-6 text-premium-text font-sans">
       <div className="w-full max-w-md bg-premium-surface border border-premium-border/60 rounded-2xl p-10 shadow-xl">
-        <div className="text-center mb-10">
-          <h1 className="font-serif text-4xl text-premium-orange mb-2 tracking-wide">MvjHub.</h1>
+        <div className="text-center mb-10 flex flex-col items-center">
+          <Image
+            src="/logo_mvj.png"
+            alt="MvjHub Logo"
+            width={68}
+            height={68}
+            className="w-16 h-16 object-contain rounded-full mb-3 shadow-md ring-2 ring-premium-orange/20"
+            priority
+          />
+          <h1 className="font-serif text-4xl text-premium-orange mb-1 tracking-wide">MvjHub.</h1>
           <p className="text-premium-text/40 uppercase tracking-[0.2em] text-xs font-bold">Studio Access</p>
         </div>
 
