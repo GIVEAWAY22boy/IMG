@@ -1,131 +1,243 @@
 "use client";
 
 import Link from "next/link";
+import Script from "next/script";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useCartStore, formatPrice } from "@/store/cartStore";
-import { load } from '@cashfreepayments/cashfree-js';
+
+// Helper function to dynamically load Razorpay checkout script if needed
+const loadRazorpayScript = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (typeof window !== "undefined" && (window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 export default function Checkout() {
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const cart = useCartStore((state) => state.cart);
   const currency = useCartStore((state) => state.currency);
+  const router = useRouter();
 
   const subtotalUsd = cart.reduce((total, item) => total + item.price_usd, 0);
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
+
     setLoading(true);
+    setErrorMessage("");
     
     try {
+      // 1. Ensure Razorpay script is loaded
+      const isLoaded = await loadRazorpayScript();
+      if (!isLoaded) {
+        throw new Error("Unable to load Razorpay checkout gateway. Please check your internet connection.");
+      }
+
+      // 2. Call backend to create Razorpay Order
       const response = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: cart, total_usd: subtotalUsd })
+        body: JSON.stringify({ 
+          items: cart, 
+          total_usd: subtotalUsd,
+          currency: 'INR'
+        })
       });
       
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Server error: ${response.status} ${text}`);
+        const errJson = await response.json().catch(() => ({}));
+        throw new Error(errJson.error || `Server error (${response.status}) while creating order.`);
       }
       
-      const data = await response.json();
+      const orderData = await response.json();
       
-      if (data.payment_session_id) {
-        const cashfree = await load({
-          mode: "sandbox", 
-        });
-        
-        cashfree.checkout({
-          paymentSessionId: data.payment_session_id,
-          redirectTarget: "_self"
-        });
-      } else {
-        alert("Failed to initialize payment. Please try again.");
+      if (!orderData.order_id) {
+        throw new Error("Invalid response received from order creation endpoint.");
+      }
+
+      // 3. Configure Razorpay Standard Checkout modal
+      const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_TnGOJs8WBgk3Cy";
+      
+      const options = {
+        key: razorpayKey,
+        amount: orderData.amount,
+        currency: orderData.currency || "INR",
+        name: "MvjHub Visual Media",
+        description: "Exclusive Stock Photography Purchase",
+        image: "/logo_mvj.png",
+        order_id: orderData.order_id,
+        handler: async function (paymentResponse: {
+          razorpay_payment_id: string;
+          razorpay_order_id: string;
+          razorpay_signature: string;
+        }) {
+          try {
+            setLoading(true);
+            // 4. Send payment signature to backend verification endpoint
+            const verifyRes = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_signature: paymentResponse.razorpay_signature
+              })
+            });
+
+            const verifyData = await verifyRes.json();
+
+            if (verifyRes.ok && verifyData.success) {
+              // Redirect to success confirmation page with order_id
+              router.push(`/checkout/success?order_id=${paymentResponse.razorpay_order_id}`);
+            } else {
+              setErrorMessage(verifyData.error || "Payment verification failed. Please contact support.");
+              setLoading(false);
+            }
+          } catch (verErr: any) {
+            console.error("Verification error:", verErr);
+            setErrorMessage("An error occurred while verifying your payment. Please contact support.");
+            setLoading(false);
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+            console.log("Razorpay checkout modal closed by customer.");
+          }
+        },
+        theme: {
+          color: "#c5a059"
+        }
+      };
+
+      // 5. Open Razorpay Modal
+      const rzp = new (window as any).Razorpay(options);
+
+      rzp.on('payment.failed', function (failureResponse: any) {
+        console.error("Payment failed:", failureResponse.error);
+        const reason = failureResponse.error?.description || failureResponse.error?.reason || "Transaction was declined.";
+        setErrorMessage(`Payment Failed: ${reason}`);
         setLoading(false);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong.");
+      });
+
+      rzp.open();
+
+    } catch (err: any) {
+      console.error("Checkout process error:", err);
+      setErrorMessage(err.message || "Failed to initialize payment.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-premium-bg py-32 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-10 border-b border-premium-border/60 pb-6 flex justify-between items-end">
-           <h1 className="font-serif text-5xl text-premium-text">Secure Checkout</h1>
-           <Link href="/cart" className="text-premium-orange uppercase tracking-widest text-xs font-bold hover:text-premium-text transition-colors">Return to Cart</Link>
-        </div>
-        
-        <div className="flex flex-col lg:flex-row gap-16">
-          {/* Checkout Info */}
-          <form onSubmit={handlePayment} className="lg:w-7/12 flex flex-col gap-10">
-            <section>
-              <h2 className="font-serif text-3xl text-premium-text mb-6">Payment Method</h2>
-              <div className="bg-premium-surface border border-premium-border/80 rounded-md p-8">
-                <p className="text-premium-text/70 mb-6">You will be securely redirected to our payment partner, Cashfree Payments, to complete your purchase. Cashfree supports all major Credit Cards, UPI, Netbanking, and Wallets. (100% Contactless)</p>
-                
-                <button 
-                  type="submit"
-                  disabled={loading || cart.length === 0}
-                  className="w-full bg-premium-orange text-white py-5 rounded-md uppercase tracking-widest text-sm font-bold hover:bg-premium-text transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-3"
-                >
-                  {loading ? (
-                    <>
-                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                      Initializing Secure Gateway...
-                    </>
-                  ) : (
-                    `Pay Now via Cashfree`
-                  )}
-                </button>
-                <div className="flex items-center justify-center gap-4 mt-6 opacity-50">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                   <span className="text-xs tracking-widest uppercase font-bold">256-bit SSL Encrypted</span>
-                </div>
-              </div>
-            </section>
-          </form>
+    <>
+      {/* Razorpay Standard Checkout Script */}
+      <Script 
+        src="https://checkout.razorpay.com/v1/checkout.js" 
+        strategy="lazyOnload" 
+      />
 
-          {/* Order Summary Sidebar */}
-          <div className="lg:w-5/12">
-            <div className="bg-premium-surface rounded-xl shadow-sm border border-premium-border/40 p-8 sticky top-32">
-              <h2 className="font-serif text-2xl text-premium-text mb-6">Order Summary</h2>
-              
-              <div className="flex flex-col gap-6 border-b border-premium-border/40 pb-6 mb-6 max-h-[40vh] overflow-y-auto pr-4">
-                {cart.length === 0 && <p className="text-premium-text/50 text-sm">Your cart is empty.</p>}
-                {cart.map((item) => (
-                  <div key={item.id} className="flex gap-4 items-center">
-                    <div className="relative w-16 h-16 rounded border border-premium-border/40 overflow-hidden shrink-0 bg-premium-bg/50">
-                      <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
+      <div className="min-h-screen bg-premium-bg py-32 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-10 border-b border-premium-border/60 pb-6 flex justify-between items-end">
+             <h1 className="font-serif text-5xl text-premium-text">Secure Checkout</h1>
+             <Link href="/cart" className="text-premium-orange uppercase tracking-widest text-xs font-bold hover:text-premium-text transition-colors">Return to Cart</Link>
+          </div>
+          
+          <div className="flex flex-col lg:flex-row gap-16">
+            {/* Checkout Form */}
+            <form onSubmit={handlePayment} className="lg:w-7/12 flex flex-col gap-10">
+              <section>
+                <h2 className="font-serif text-3xl text-premium-text mb-6">Payment Method</h2>
+                <div className="bg-premium-surface border border-premium-border/80 rounded-md p-8">
+                  <p className="text-premium-text/70 mb-6">
+                    Pay securely using Razorpay Standard Checkout. Supports all major Credit & Debit Cards, UPI (GPay, PhonePe, Paytm), Netbanking, and Wallets. Instant digital license dispatch.
+                  </p>
+
+                  {errorMessage && (
+                    <div className="mb-6 p-4 rounded bg-red-500/10 border border-red-500/30 text-red-600 text-sm">
+                      {errorMessage}
                     </div>
-                    <div className="flex-grow">
-                      <h4 className="font-serif text-premium-text text-sm md:text-base line-clamp-1">{item.title}</h4>
-                    </div>
-                    <div className="text-premium-text font-medium text-sm md:text-base shrink-0">{formatPrice(item.price_usd, currency)}</div>
+                  )}
+                  
+                  <button 
+                    type="submit"
+                    disabled={loading || cart.length === 0}
+                    className="w-full bg-premium-orange text-white py-5 rounded-md uppercase tracking-widest text-sm font-bold hover:bg-premium-text transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-3 cursor-pointer"
+                  >
+                    {loading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Opening Razorpay Gateway...
+                      </>
+                    ) : (
+                      `Pay Now via Razorpay`
+                    )}
+                  </button>
+                  <div className="flex items-center justify-center gap-4 mt-6 opacity-50">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                       <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                     </svg>
+                     <span className="text-xs tracking-widest uppercase font-bold">256-bit SSL Encrypted • PCI-DSS Level 1</span>
                   </div>
-                ))}
-              </div>
-              
-              <div className="flex justify-between text-premium-text/70 mb-3 text-sm">
-                <span>Subtotal</span>
-                <span>{formatPrice(subtotalUsd, currency)}</span>
-              </div>
-              <div className="flex justify-between text-premium-text/70 mb-6 text-sm">
-                <span>Tax</span>
-                <span>Included</span>
-              </div>
-              
-              <div className="flex justify-between text-2xl text-premium-text font-serif mb-8 pt-4 border-t border-premium-border/40">
-                <span>Total</span>
-                <span>{formatPrice(subtotalUsd, currency)}</span>
+                </div>
+              </section>
+            </form>
+
+            {/* Order Summary Sidebar */}
+            <div className="lg:w-5/12">
+              <div className="bg-premium-surface rounded-xl shadow-sm border border-premium-border/40 p-8 sticky top-32">
+                <h2 className="font-serif text-2xl text-premium-text mb-6">Order Summary</h2>
+                
+                <div className="flex flex-col gap-6 border-b border-premium-border/40 pb-6 mb-6 max-h-[40vh] overflow-y-auto pr-4">
+                  {cart.length === 0 && <p className="text-premium-text/50 text-sm">Your cart is empty.</p>}
+                  {cart.map((item) => (
+                    <div key={item.id} className="flex gap-4 items-center">
+                      <div className="relative w-16 h-16 rounded border border-premium-border/40 overflow-hidden shrink-0 bg-premium-bg/50">
+                        <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-grow">
+                        <h4 className="font-serif text-premium-text text-sm md:text-base line-clamp-1">{item.title}</h4>
+                      </div>
+                      <div className="text-premium-text font-medium text-sm md:text-base shrink-0">{formatPrice(item.price_usd, currency)}</div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="flex justify-between text-premium-text/70 mb-3 text-sm">
+                  <span>Subtotal</span>
+                  <span>{formatPrice(subtotalUsd, currency)}</span>
+                </div>
+                <div className="flex justify-between text-premium-text/70 mb-6 text-sm">
+                  <span>Tax</span>
+                  <span>Included</span>
+                </div>
+                
+                <div className="flex justify-between text-2xl text-premium-text font-serif mb-8 pt-4 border-t border-premium-border/40">
+                  <span>Total</span>
+                  <span>{formatPrice(subtotalUsd, currency)}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
