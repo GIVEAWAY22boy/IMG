@@ -39,8 +39,8 @@ export default function ContactPage() {
               <h2 className="font-serif text-2xl text-premium-text mb-3">Studio Headquarters</h2>
               <p className="text-premium-text/70 text-sm leading-relaxed">
                 <strong className="text-premium-text block">MvjHub Visual Media</strong>
-                22, Kashiram Avas Colony, Near ITI<br />
-                Lalitpur, Uttar Pradesh - 284403, India
+                Creative Studio Wing<br />
+                Lalitpur, Uttar Pradesh, India
               </p>
             </div>
 

@@ -44,7 +44,7 @@ export default function MainLayout({
               Inquiries: <a href="mailto:support@mvjhub.in" className="text-[#c5a059] hover:underline">support@mvjhub.in</a>
             </p>
             <p className="text-xs text-white/40 leading-relaxed">
-              HQ: 22, Kashiram Avas Colony, Near ITI, Lalitpur, Uttar Pradesh - 284403, India
+              HQ: Lalitpur, Uttar Pradesh, India
             </p>
             <div className="pt-2 flex items-center gap-2 text-xs text-white/50">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>

@@ -101,7 +101,7 @@ export default function TermsPage() {
             <div className="bg-premium-surface border border-premium-border/40 p-6 rounded-xl mt-4 font-mono text-sm space-y-1">
               <p>Legal & Compliance Desk, MvjHub</p>
               <p>Email: legal@mvjhub.in / support@mvjhub.in</p>
-              <p>Address: 22, Kashiram Avas Colony, Near ITI, Lalitpur, Uttar Pradesh - 284403, India</p>
+              <p>Address: Lalitpur, Uttar Pradesh, India</p>
             </div>
           </section>
         </div>
