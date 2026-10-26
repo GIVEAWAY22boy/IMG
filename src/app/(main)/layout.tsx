@@ -43,6 +43,9 @@ export default function MainLayout({
             <p className="text-sm text-white/70">
               Inquiries: <a href="mailto:support@mvjhub.in" className="text-[#c5a059] hover:underline">support@mvjhub.in</a>
             </p>
+            <p className="text-xs text-white/60">
+              Helpline: <a href="tel:+918726040058" className="text-[#c5a059] hover:underline">+91 87260 40058</a>
+            </p>
             <p className="text-xs text-white/40 leading-relaxed">
               HQ: Lalitpur, Uttar Pradesh, India
             </p>

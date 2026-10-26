@@ -54,6 +54,12 @@ export default function ContactPage() {
                   support@mvjhub.in
                 </a>
               </p>
+              <p className="text-sm text-premium-text/80 mb-2">
+                <span className="text-premium-text/50 font-mono text-xs uppercase block">Direct Helpline</span>
+                <a href="tel:+918726040058" className="text-premium-orange hover:underline font-mono">
+                  +91 87260 40058
+                </a>
+              </p>
               <p className="text-sm text-premium-text/80">
                 <span className="text-premium-text/50 font-mono text-xs uppercase block">Commercial Licensing</span>
                 <a href="mailto:licensing@mvjhub.in" className="text-premium-orange hover:underline">

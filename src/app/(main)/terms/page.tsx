@@ -61,7 +61,7 @@ export default function TermsPage() {
               Prices for all visual assets are listed transparently on individual catalog pages. Prices are displayed in <strong>United States Dollars (USD)</strong> for international visitors and converted transparently to <strong>Indian Rupees (INR)</strong> for transactions originated within India based on prevailing exchange rates.
             </p>
             <p>
-              All payments are processed securely through certified, PCI-DSS Level 1 compliant payment gateways (including Razorpay, Cashfree, and international card networks). MvjHub does not capture, store, or process full credit card numbers or banking credentials on its local servers.
+              All payments are processed securely through certified, PCI-DSS Level 1 compliant payment gateway partners (primarily Razorpay Payments and partner banking networks). MvjHub does not capture, store, or process full credit card numbers or banking credentials on its local servers.
             </p>
           </section>
 
