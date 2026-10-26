@@ -81,6 +81,43 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      {/* Cinematic Showcase Section */}
+      <section className="py-28 px-6 bg-premium-surface border-t border-premium-border/40">
+        <div className="max-w-5xl mx-auto text-center">
+          <span className="text-premium-orange uppercase tracking-[0.3em] text-xs font-bold mb-3 block">
+            Official Channel & Studio Reel
+          </span>
+          <h2 className="font-serif text-4xl md:text-6xl text-premium-text mb-6">
+            The Visual <span className="italic text-premium-orange">Journey.</span>
+          </h2>
+          <p className="text-lg text-premium-text/70 font-light max-w-2xl mx-auto mb-12">
+            Immerse yourself in our creative vision. Watch our latest visual showcase and follow our official YouTube channel for editorial releases.
+          </p>
+
+          <div className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-premium-border/60 bg-black">
+            <iframe
+              src="https://www.youtube.com/embed/6ooK-zRY-f0"
+              title="MvjHub Official Visual Media"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="w-full h-full border-0"
+            />
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <a
+              href="https://youtu.be/6ooK-zRY-f0?si=jYLn-zl8wbvNzDme"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-red-600 text-white uppercase tracking-widest text-xs font-bold hover:bg-premium-text transition-colors shadow-md"
+            >
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73z"/></svg>
+              Watch on YouTube
+            </a>
+          </div>
+        </div>
+      </section>
       
       {/* Decorative Marquee */}
       <div className="w-full overflow-hidden bg-premium-orange text-white py-6 flex whitespace-nowrap">

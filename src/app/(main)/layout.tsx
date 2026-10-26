@@ -36,6 +36,15 @@ export default function MainLayout({
             <h3 className="uppercase tracking-[0.2em] text-xs font-bold text-white/40 mb-2">Explore</h3>
             <Link href="/collection" className="hover:text-[#c5a059] transition-colors">The Collection</Link>
             <Link href="/about" className="hover:text-[#c5a059] transition-colors">Our Story</Link>
+            <a 
+              href="https://youtu.be/6ooK-zRY-f0?si=jYLn-zl8wbvNzDme" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
+            >
+              <span>YouTube Channel</span>
+              <svg className="w-3.5 h-3.5 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 2c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+            </a>
             <Link href="/cart" className="hover:text-[#c5a059] transition-colors">Cart</Link>
           </div>
           <div className="flex flex-col gap-4">

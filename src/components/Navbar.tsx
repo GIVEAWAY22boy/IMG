@@ -117,9 +117,10 @@ export default function Navbar() {
         </div>
 
         <div className={
-          "absolute bottom-20 flex gap-12 text-sm uppercase tracking-widest text-premium-text/50 font-medium transition-all duration-700 delay-300 " +
+          "absolute bottom-20 flex flex-wrap justify-center gap-8 md:gap-12 text-sm uppercase tracking-widest text-premium-text/50 font-medium transition-all duration-700 delay-300 " +
           (isOpen ? 'opacity-100' : 'opacity-0')
         }>
+          <a href="https://youtu.be/6ooK-zRY-f0?si=jYLn-zl8wbvNzDme" target="_blank" rel="noopener noreferrer" className="hover:text-premium-orange transition-colors">YouTube</a>
           <a href="#" className="hover:text-premium-orange transition-colors">Instagram</a>
           <a href="#" className="hover:text-premium-orange transition-colors">Twitter</a>
         </div>
